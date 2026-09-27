@@ -20,10 +20,13 @@ java -version
 echo "Maven version:"
 mvn -version
 
+# Create app user (if not exists)
+id appuser > /dev/null 2>&1 || sudo useradd -m -s /bin/bash appuser
+
 # Create app directory
 sudo mkdir -p /opt/springboot-app
-sudo chown $USER:$USER /opt/springboot-app
-cd /opt/springboot-app
+sudo chown appuser:appuser /opt/springboot-app
+sudo chmod 755 /opt/springboot-app
 
 # Create systemd service file
 sudo tee /etc/systemd/system/springboot-app.service > /dev/null <<EOF
@@ -33,7 +36,7 @@ After=network.target
 
 [Service]
 Type=simple
-User=$USER
+User=appuser
 WorkingDirectory=/opt/springboot-app
 ExecStart=/usr/bin/java -jar /opt/springboot-app/app.jar
 Restart=on-failure
