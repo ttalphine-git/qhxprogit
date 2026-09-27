@@ -141,7 +141,7 @@ function LoginPage({ onLogin, loading, error }) {
         <div className="brand-mark">
           <Shield size={34} aria-hidden="true" />
         </div>
-        <h1>Superadmin Portal</h1>
+        <h1>qhx Superadmin Portal</h1>
         <p>Secure control center for user access, operations, approvals, and platform health.</p>
         <div className="status-strip">
           <span><CheckCircle2 size={17} aria-hidden="true" /> Java 21 API</span>
