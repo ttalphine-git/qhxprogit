@@ -1,0 +1,7 @@
+.m2/
+.mvn/
+backend/target/
+backend/spring.log
+frontend/node_modules/
+frontend/dist/
+frontend/vite.log
