@@ -50,7 +50,7 @@ bash setup-droplet.sh
 Or run the commands from `setup-droplet.sh` manually if you prefer.
 
 This will:
-- Install Java 17 and Maven
+- Install Java 21 and Maven
 - Create `/opt/springboot-app` directory
 - Set up systemd service for your Spring Boot app
 - Download GitHub Actions runner

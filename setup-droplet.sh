@@ -8,8 +8,8 @@ echo "Installing dependencies and setting up GitHub Actions runner..."
 sudo apt-get update
 sudo apt-get upgrade -y
 
-# Install Java 17 (required for Spring Boot)
-sudo apt-get install -y openjdk-17-jdk
+# Install Java 21 (required for Spring Boot)
+sudo apt-get install -y openjdk-21-jdk
 
 # Install Maven
 sudo apt-get install -y maven
