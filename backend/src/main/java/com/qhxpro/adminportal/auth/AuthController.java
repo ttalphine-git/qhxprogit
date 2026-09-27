@@ -1,5 +1,6 @@
 package com.qhxpro.adminportal.auth;
 
+import com.qhxpro.adminportal.user.AppUserRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,27 +18,30 @@ public class AuthController {
 
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
-    private final SuperAdminProperties superAdminProperties;
+    private final AppUserRepository userRepository;
 
     public AuthController(
             PasswordEncoder passwordEncoder,
             TokenService tokenService,
-            SuperAdminProperties superAdminProperties
+            AppUserRepository userRepository
     ) {
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
-        this.superAdminProperties = superAdminProperties;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/auth/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) {
-        var admin = superAdminProperties.account();
-        if (!admin.username().equalsIgnoreCase(request.username())
-                || !passwordEncoder.matches(request.password(), admin.password())) {
+        var user = userRepository.findByUsernameIgnoreCase(request.username())
+                .filter(found -> found.isEnabled()
+                        && passwordEncoder.matches(request.password(), found.getPasswordHash()))
+                .orElseThrow(InvalidCredentialsException::new);
+
+        if (!"SUPER_ADMIN".equals(user.getRole().name())) {
             throw new InvalidCredentialsException();
         }
 
-        var session = tokenService.createSession(admin.username(), "SUPER_ADMIN");
+        var session = tokenService.createSession(user.getUsername(), user.getRole().name());
         return new LoginResponse(session.token(), session.username(), session.role());
     }
 
